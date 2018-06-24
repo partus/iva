@@ -41,7 +41,7 @@ def _parse_function(filename, label, size):
 #     image = tf.clip_by_value(image, 0.0, 1.0)
 #
 #     return image, label
-
+# def input_vectors
 
 def input_fn(is_training, features, labels, params):
     """Input function for the SIGNS dataset.
@@ -80,7 +80,21 @@ def input_fn(is_training, features, labels, params):
     #         .batch(params.batch_size)
     #         .prefetch(1)  # make sure you always have one batch ready to serve
     #     )
-    dataset = tf.data.Dataset.from_tensor_slices((features, labels))
+    if is_training:
+        dataset = (tf.data.Dataset.from_tensor_slices((tf.constant(features), tf.constant(labels)))
+            .shuffle(num_samples)  # whole dataset into the buffer ensures good shuffling
+            # .map(parse_fn, num_parallel_calls=params.num_parallel_calls)
+            # .map(train_fn, num_parallel_calls=params.num_parallel_calls)
+            .batch(params.batch_size)
+            # .prefetch(1)  # make sure you always have one batch ready to serve
+        )
+    else:
+        dataset = (tf.data.Dataset.from_tensor_slices((tf.constant(features), tf.constant(labels)))
+            # .map(parse_fn)
+            .batch(params.batch_size)
+            # .prefetch(1)  # make sure you always have one batch ready to serve
+        )
+    # dataset = tf.data.Dataset.from_tensor_slices((features, labels))
     # Create reinitializable iterator from dataset
     iterator = dataset.make_initializable_iterator()
     images, labels = iterator.get_next()

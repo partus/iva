@@ -19,6 +19,8 @@ def build_model(is_training, inputs, params):
     # images = inputs['videovectors']
 
     # assert images.get_shape().as_list() == [None, params.image_size, params.image_size, 3]
+    print("Videovectors",videovectors.get_shape().as_list())
+    assert videovectors.get_shape().as_list() == [None, params.num_features]
 
     out = videovectors
     # Define the number of channels of each convolution
@@ -80,12 +82,12 @@ def model_fn(mode, inputs, params, reuse=False):
     if is_training:
         optimizer = tf.train.AdamOptimizer(params.learning_rate)
         global_step = tf.train.get_or_create_global_step()
-        if params.use_batch_norm:
-            # Add a dependency to update the moving mean and variance for batch normalization
-            with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
-                train_op = optimizer.minimize(loss, global_step=global_step)
-        else:
-            train_op = optimizer.minimize(loss, global_step=global_step)
+        # if params.use_batch_norm:
+        #     # Add a dependency to update the moving mean and variance for batch normalization
+        #     with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
+        #         train_op = optimizer.minimize(loss, global_step=global_step)
+        # else:
+        train_op = optimizer.minimize(loss, global_step=global_step)
 
 
     # -----------------------------------------------------------
