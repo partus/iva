@@ -10,10 +10,12 @@ from model.utils import Params
 
 PYTHON = sys.executable
 parser = argparse.ArgumentParser()
-parser.add_argument('--parent_dir', default='experiments/learning_rate',
-                    help="Directory containing params.json")
-parser.add_argument('--data_dir', default='data/64x64_SIGNS',
+parser.add_argument('--parent_dir', default='experiments/videovectorsparams',
+                    help="Experiment directory containing params.json")
+
+parser.add_argument('--data_dir', default='/data/videovectors',
                     help="Directory containing the dataset")
+
 
 
 def launch_training_job(parent_dir, data_dir, job_name, params):
@@ -49,11 +51,13 @@ if __name__ == "__main__":
 
     # Perform hypersearch over one parameter
     learning_rates = [1e-4, 1e-3, 1e-2]
-
+    batch_sizes = [32,128,256]
     for learning_rate in learning_rates:
-        # Modify the relevant parameter in params
-        params.learning_rate = learning_rate
+        for batch_size in  batch_sizes:
+            # Modify the relevant parameter in params
+            params.learning_rate = learning_rate
+            params.batch_size = batch_size
 
-        # Launch job (name has to be unique)
-        job_name = "learning_rate_{}".format(learning_rate)
-        launch_training_job(args.parent_dir, args.data_dir, job_name, params)
+            # Launch job (name has to be unique)
+            job_name = "learning_rate_{}".format(learning_rate)
+            launch_training_job(args.parent_dir, args.data_dir, job_name, params)

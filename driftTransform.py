@@ -98,7 +98,7 @@ def reservoir(input,x,name="reservoir"):
         w_in = tf.get_variable("InputMatrix", [input_size, rn_number], dtype=dtype,
                             trainable=False, initializer=init_ops.random_normal_initializer(stddev=0.5))
         w_r = tf.get_variable("ReservoirMatrix", [rn_number, rn_number], dtype=dtype,
-                           trainable=False, initializer=init_ops.random_normal_initializer(stddev=0.05))
+                           trainable=False, initializer=init_ops.random_normal_initializer(stddev=0.0005))
         toInit.append(w_in)
         toInit.append(w_r)
         # in_mat = tf.concat([input, state], axis=1)

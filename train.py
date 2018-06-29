@@ -46,7 +46,7 @@ if __name__ == '__main__':
     # Comment these lines if you are developing your model and don't care about overwritting
     model_dir_has_best_weights = os.path.isdir(os.path.join(args.model_dir, "best_weights"))
     overwritting = model_dir_has_best_weights and args.restore_from is None
-    assert not overwritting, "Weights found in model_dir, aborting to avoid overwrite"
+    # assert not overwritting, "Weights found in model_dir, aborting to avoid overwrite"
 
     # Set the logger
     set_logger(os.path.join(args.model_dir, 'train.log'))
@@ -63,7 +63,9 @@ if __name__ == '__main__':
     # eval_filenames = [os.path.join(dev_data_dir, f) for f in os.listdir(dev_data_dir)
     #                   if f.endswith('.jpg')]
     train_npy = np.load(os.path.join(data_dir,"train.npy"))
+    train_npy = np.nan_to_num(train_npy)
     eval_npy = np.load(os.path.join(data_dir,"test.npy"))
+    eval_npy = np.nan_to_num(eval_npy)
     # Labels will be between 0 and 5 included (6 classes in total)
     # train_labels = [int(f.split('/')[-1][0]) for f in train_filenames]
     # eval_labels = [int(f.split('/')[-1][0]) for f in eval_filenames]
